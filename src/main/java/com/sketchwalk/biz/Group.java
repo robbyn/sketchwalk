@@ -4,13 +4,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Group {
-    private final int id = 0;
+    private int id;
+    private String name;
     private String displayName;
     private String description;
-    private final Set<User> members = new HashSet<>();
+    private final Set<User> users = new HashSet<>();
 
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDisplayName() {
@@ -29,7 +38,7 @@ public class Group {
         this.description = description;
     }
 
-    public Set<User> getMembers() {
-        return members;
+    public Set<User> getUsers() {
+        return users;
     }
 }

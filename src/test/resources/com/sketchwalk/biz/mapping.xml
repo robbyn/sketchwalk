@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapping PUBLIC '-//tastefuljava.org//Jedo Mapping File 1.0//EN' 'jedo.dtd'>
+<mapping package="com.sketchwalk.biz">
+    <class name="User">
+        <id>
+            <field name="id" column="ID"/>
+        </id>
+        <field name="username" column="USERNAME"/>
+        <field name="email" column="EMAIL"/>
+        <field name="displayName" column="DISPLAY_NAME"/>
+        <set name="groups" fetch-mode="lazy">
+            <fetch>
+                SELECT groups.* FROM groups_users,groups
+                WHERE USER_ID=${id} AND GROUP_ID=groups.ID
+            </fetch>
+            <add parent="parent" element="child">
+                INSERT INTO groups_users(GROUP_ID,USER_ID)
+                VALUES(${child.id},${parent.id})
+            </add>
+            <remove parent="parent" element="child">
+                DELETE FROM groups_users
+                WHERE USER_ID=${parent.id} AND GROUP_ID=${child.id}
+            </remove>
+            <clear parent="parent">
+                DELETE FROM groups_users
+                WHERE USER_ID=${parent.id}
+            </clear>
+        </set>
+
+        <load>
+            SELECT * FROM users
+            WHERE ID=${id}
+        </load>
+        <query name="byUsername" parameters="username">
+            SELECT * FROM users
+            WHERE USERNAME=${username}
+        </query>
+        <query name="byEmail" parameters="email">
+            SELECT * FROM users
+            WHERE EMAIL=${email}
+        </query>
+        <insert get-generated-keys="true">
+            INSERT INTO users(USERNAME,EMAIL,DISPLAY_NAME)
+            VALUES(${username},${email},${displayName})
+        </insert>
+        <update>
+            UPDATE users
+            SET USERNAME=${username}, EMAIL=${email}, DISPLAY_NAME=${displayName}
+            WHERE ID=${id}
+        </update>
+        <delete>
+            DELETE FROM users WHERE ID=${id}
+        </delete>
+    </class>
+
+    <class name="Group">
+        <id>
+            <field name="id" column="ID"/>
+        </id>
+        <field name="name" column="NAME"/>
+        <field name="displayName" column="DISPLAY_NAME"/>
+        <field name="description" column="DESCRIPTION"/>
+        <set name="users" fetch-mode="lazy">
+            <fetch>
+                SELECT users.* FROM groups_users,users
+                WHERE GROUP_ID=${id} AND USER_ID=users.ID
+            </fetch>
+            <add parent="parent" element="child">
+                INSERT INTO groups_users(GROUP_ID,USER_ID)
+                VALUES(${parent.id},${child.id})
+            </add>
+            <remove parent="parent" element="child">
+                DELETE FROM groups_users
+                WHERE GROUP_ID=${parent.id} AND USER_ID=${child.id}
+            </remove>
+            <clear parent="parent">
+                DELETE FROM groups_users
+                WHERE GROUP_ID=${parent.id}
+            </clear>
+        </set>
+
+        <load>
+            SELECT * FROM groups
+            WHERE ID=${id}
+        </load>
+        <query name="byName" parameters="name">
+            SELECT * FROM groups
+            WHERE USERNAME=${name}
+        </query>
+        <insert get-generated-keys="true">
+            INSERT INTO groups(NAME,DISPLAY_NAME,DESCRIPTION)
+            VALUES(${name},${displayName},${description})
+        </insert>
+        <update>
+            UPDATE groups
+            SET NAME=${name}, DISPLAY_NAME=${displayName},
+                DESCRIPTION=${description}
+            WHERE ID=${id}
+        </update>
+        <delete>
+            DELETE FROM groups WHERE ID=${id}
+        </delete>
+    </class>
+</mapping>

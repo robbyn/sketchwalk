@@ -1,10 +1,14 @@
 package com.sketchwalk.biz;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class User {
-    private final int id = 0;
+    private int id;
     private String username;
     private String email;
     private String displayName;
+    private final Set<Group> groups = new HashSet<>();
 
     public int getId() {
         return id;
@@ -32,5 +36,9 @@ public class User {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public Set<Group> getGroups() {
+        return groups;
     }
 }
