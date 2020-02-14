@@ -1,12 +1,22 @@
 package com.sketchwalk.biz;
 
+import com.sketchwalk.util.Util;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class User {
+    private static final Charset DIGEST_ENCODING = StandardCharsets.UTF_8;
+    private static final String DIGEST_ALGORITHM = "SHA-256";
+
     private int id;
     private String username;
     private String email;
+    private String passwordHash;
     private String displayName;
     private final Set<Group> groups = new HashSet<>();
 
@@ -28,6 +38,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean checkPassword(String password) {
+        return hash(password).equals(passwordHash);
+    }
+
+    public void setPassword(String password) {
+        this.passwordHash = hash(password);
     }
 
     public String getDisplayName() {
@@ -60,5 +78,15 @@ public class User {
 
     public void clearGroups() {
         groups.clear();
+    }
+
+    private static String hash(String password) {
+        try {
+            byte[] bytes = password.getBytes(DIGEST_ENCODING);
+            return Util.hex(Util.hash(DIGEST_ALGORITHM, bytes));
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex.getMessage());
+        }
     }
 }

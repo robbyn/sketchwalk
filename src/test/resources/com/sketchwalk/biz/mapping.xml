@@ -7,6 +7,7 @@
         </id>
         <field name="username" column="USERNAME"/>
         <field name="email" column="EMAIL"/>
+        <field name="passwordHash" column="PASSWORD_HASH"/>
         <field name="displayName" column="DISPLAY_NAME"/>
         <set name="groups" fetch-mode="lazy">
             <fetch>
@@ -40,12 +41,13 @@
             WHERE EMAIL=${email}
         </query>
         <insert get-generated-keys="true">
-            INSERT INTO users(USERNAME,EMAIL,DISPLAY_NAME)
-            VALUES(${username},${email},${displayName})
+            INSERT INTO users(USERNAME,EMAIL,PASSWORD_HASH,DISPLAY_NAME)
+            VALUES(${username},${email},${passwordHash},${displayName})
         </insert>
         <update>
             UPDATE users
-            SET USERNAME=${username}, EMAIL=${email}, DISPLAY_NAME=${displayName}
+            SET USERNAME=${username}, EMAIL=${email},
+                PASSWORD_HASH=${passwordHash} DISPLAY_NAME=${displayName}
             WHERE ID=${id}
         </update>
         <delete>

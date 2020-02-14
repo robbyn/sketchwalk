@@ -29,6 +29,7 @@ public class BizTest extends BizTestBase {
         user.setUsername("robby");
         user.setDisplayName("Maurice Perry");
         user.setEmail("maurice@perry.ch");
+        user.setPassword("abcdef123456");
         session.insert(user);
         int id = user.getId();
         session.commit();
@@ -36,6 +37,11 @@ public class BizTest extends BizTestBase {
         assertEquals(user.getUsername(), user2.getUsername());
         assertEquals(user.getDisplayName(), user2.getDisplayName());
         assertEquals(user.getEmail(), user2.getEmail());
+        long tm = System.nanoTime();
+        boolean ok = user2.checkPassword("abcdef123456");
+        tm = System.nanoTime()-tm;
+        assertTrue(ok);
+        assertTrue(tm < 100000); // 0.1ms
     }
 
     @Test
@@ -67,7 +73,7 @@ public class BizTest extends BizTestBase {
         group.setDescription("Members of the Sketchwalk group");
         session.insert(group);
         int groupId = group.getId();
-        user.getGroups().add(group);
+        user.addGroup(group);
         session.commit();
         user = session.load(User.class, userId);
         group = session.load(Group.class, groupId);
