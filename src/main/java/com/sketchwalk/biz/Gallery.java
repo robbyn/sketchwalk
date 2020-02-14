@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Gallery {
-    private final int id = 0;
+    private int id;
     private final Set<Media> content = new HashSet<>();
 
     public int getId() {

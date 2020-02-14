@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Event {
-    private final int id = 0;
+    private int id;
     private String label;
     private String description;
     private Media picture;
