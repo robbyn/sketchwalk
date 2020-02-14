@@ -39,6 +39,26 @@ public class User {
     }
 
     public Set<Group> getGroups() {
-        return groups;
+        return new HashSet<>(groups);
+    }
+
+    public int getGroupCount() {
+        return groups.size();
+    }
+
+    public boolean isInGroup(Group g) {
+        return groups.contains(g);
+    }
+
+    public boolean addGroup(Group g) {
+        return groups.add(g);
+    }
+
+    public boolean removeGroup(Group g) {
+        return groups.remove(g);
+    }
+
+    public void clearGroups() {
+        groups.clear();
     }
 }

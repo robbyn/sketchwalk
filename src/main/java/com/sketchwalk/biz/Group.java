@@ -1,9 +1,10 @@
 package com.sketchwalk.biz;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
-public class Group {
+public class Group implements Iterable<User> {
     private int id;
     private String name;
     private String displayName;
@@ -38,7 +39,28 @@ public class Group {
         this.description = description;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    @Override
+    public Iterator<User> iterator() {
+        return users.iterator();
+    }
+
+    public boolean containsUser(User u) {
+        return users.contains(u);
+    }
+
+    public int getUserCount() {
+        return users.size();
+    }
+
+    public boolean addUser(User u) {
+        return users.add(u);
+    }
+
+    public boolean removeUser(User u) {
+        return users.remove(u);
+    }
+
+    public void clearUsers() {
+        users.clear();
     }
 }

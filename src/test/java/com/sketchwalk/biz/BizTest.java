@@ -71,9 +71,9 @@ public class BizTest extends BizTestBase {
         session.commit();
         user = session.load(User.class, userId);
         group = session.load(Group.class, groupId);
-        assertEquals(1, user.getGroups().size());
-        assertEquals(1, group.getUsers().size());
-        assertTrue(group.getUsers().contains(user));
-        assertTrue(user.getGroups().contains(group));
+        assertEquals(1, user.getGroupCount());
+        assertEquals(1, group.getUserCount());
+        assertTrue(group.containsUser(user));
+        assertTrue(user.isInGroup(group));
     }
 }
