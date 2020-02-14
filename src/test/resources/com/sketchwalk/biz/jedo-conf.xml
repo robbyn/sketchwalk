@@ -8,5 +8,5 @@
         <property name="user" value="sa"/>
         <property name="password" value=""/>
     </data-source>
-    <mapping resource="com/sketchwalk/biz/mapping.xml"/>
+    <mapping resource="com/sketchwalk/biz/mapping-h2.xml"/>
 </configuration>
