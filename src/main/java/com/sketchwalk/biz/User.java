@@ -64,7 +64,7 @@ public class User {
     }
 
     public void setProfilePicture(Media pic) {
-        profilePicture = new Ref<>(pic);
+        profilePicture = pic == null ? null : new Ref<>(pic);
     }
 
     public Media getCoverPicture() {
@@ -72,7 +72,7 @@ public class User {
     }
 
     public void setCoverPicture(Media pic) {
-        coverPicture = new Ref<>(pic);
+        coverPicture = pic == null ? null : new Ref<>(pic);
     }
 
     public Set<Group> getGroups() {
