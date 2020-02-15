@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.tastefuljava.jedo.Ref;
 
 public class User {
     private static final Charset DIGEST_ENCODING = StandardCharsets.UTF_8;
@@ -19,6 +20,8 @@ public class User {
     private String passwordHash;
     private String displayName;
     private final Set<Group> groups = new HashSet<>();
+    private Ref<Media> profilePicture;
+    private Ref<Media> coverPicture;
 
     public int getId() {
         return id;
@@ -54,6 +57,22 @@ public class User {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public Media getProfilePicture() {
+        return profilePicture == null ? null : profilePicture.get();
+    }
+
+    public void setProfilePicture(Media pic) {
+        profilePicture = new Ref<>(pic);
+    }
+
+    public Media getCoverPicture() {
+        return coverPicture == null ? null : coverPicture.get();
+    }
+
+    public void setCoverPicture(Media pic) {
+        coverPicture = new Ref<>(pic);
     }
 
     public Set<Group> getGroups() {

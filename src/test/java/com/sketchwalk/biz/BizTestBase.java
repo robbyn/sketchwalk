@@ -34,7 +34,7 @@ public abstract class BizTestBase {
         try {
             Files.deleteIfExists(TESTDB_DIR);
             open();
-            runScript("initdb.sql");
+            runScript("initdb-h2.sql");
         } catch (IOException | SQLException
                 | ClassNotFoundException | RuntimeException ex) {
             Logger.getLogger(BizTestBase.class.getName()).log(Level.SEVERE, null, ex);

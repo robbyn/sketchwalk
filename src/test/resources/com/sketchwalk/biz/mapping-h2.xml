@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapping PUBLIC '-//tastefuljava.org//Jedo Mapping File 1.0//EN' 'jedo.dtd'>
 <mapping package="com.sketchwalk.biz">
+    <class name="Media">
+        <id>
+            <field name="id" column="ID"/>
+        </id>
+        <field name="mimeType" column="MIME_TYPE"/>
+        <field name="data" column="DATA"/>
+        <load>
+            SELECT * FROM medias
+            WHERE ID=${id}
+        </load>
+        <insert get-generated-keys="true">
+            INSERT INTO medias(MIME_TYPE,DATA)
+            VALUES(${mimeType},${data})
+        </insert>
+        <delete>
+            DELETE FROM medias WHERE ID=${id}
+        </delete>
+    </class>
+
     <class name="User">
         <id>
             <field name="id" column="ID"/>
@@ -9,6 +28,8 @@
         <field name="email" column="EMAIL"/>
         <field name="passwordHash" column="PASSWORD_HASH"/>
         <field name="displayName" column="DISPLAY_NAME"/>
+        <reference name="profilePicture" column="PROFILE_PICTURE" fetch-mode="lazy"/>
+        <reference name="coverPicture" column="COVER_PICTURE" fetch-mode="lazy"/>
         <set name="groups" fetch-mode="lazy">
             <fetch>
                 SELECT groups.* FROM groups_users,groups
@@ -41,13 +62,13 @@
             WHERE EMAIL=${email}
         </query>
         <insert get-generated-keys="true">
-            INSERT INTO users(USERNAME,EMAIL,PASSWORD_HASH,DISPLAY_NAME)
-            VALUES(${username},${email},${passwordHash},${displayName})
+            INSERT INTO users(USERNAME,EMAIL,PASSWORD_HASH,DISPLAY_NAME,PROFILE_PICTURE,COVER_PICTURE)
+            VALUES(${username},${email},${passwordHash},${displayName},${profilePicture.id},${coverPicture.id})
         </insert>
         <update>
             UPDATE users
-            SET USERNAME=${username}, EMAIL=${email},
-                PASSWORD_HASH=${passwordHash} DISPLAY_NAME=${displayName}
+            SET USERNAME=${username}, EMAIL=${email}, PASSWORD_HASH=${passwordHash},
+                DISPLAY_NAME=${displayName}, PROFILE_PICTURE=${profilePicture.id}, COVER_PICTURE=${coverPicture.id}
             WHERE ID=${id}
         </update>
         <delete>

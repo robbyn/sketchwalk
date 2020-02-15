@@ -1,5 +1,9 @@
 package com.sketchwalk.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -42,5 +46,16 @@ public class Util {
         }
         DateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
         return fmt.parse(s);
+    }
+
+    public static byte[] loadBinary(URL url) throws IOException {
+        try (InputStream in = url.openStream()) {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buf = new byte[4096];
+            for (int n = in.read(buf); n > 0; n = in.read(buf)) {
+                out.write(buf, 0, n);
+            }
+            return out.toByteArray();
+        }
     }
 }

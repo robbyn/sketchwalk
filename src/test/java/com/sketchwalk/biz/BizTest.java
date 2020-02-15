@@ -1,5 +1,6 @@
 package com.sketchwalk.biz;
 
+import com.sketchwalk.util.Util;
 import java.io.IOException;
 import java.sql.SQLException;
 import org.junit.After;
@@ -24,12 +25,14 @@ public class BizTest extends BizTestBase {
     }
 
     @Test
-    public void createUser() {
+    public void createUser() throws IOException {
         User user = new User();
         user.setUsername("robby");
         user.setDisplayName("Maurice Perry");
         user.setEmail("maurice@perry.ch");
         user.setPassword("abcdef123456");
+        user.setProfilePicture(fromJpegResource("profile.jpg"));
+        user.setCoverPicture(fromJpegResource("cover.jpg"));
         session.insert(user);
         int id = user.getId();
         session.commit();
@@ -37,11 +40,17 @@ public class BizTest extends BizTestBase {
         assertEquals(user.getUsername(), user2.getUsername());
         assertEquals(user.getDisplayName(), user2.getDisplayName());
         assertEquals(user.getEmail(), user2.getEmail());
+        assertNotNull(user2.getProfilePicture());
+        assertArrayEquals(
+                user2.getProfilePicture().getData(), loadResource("profile.jpg"));
+        assertNotNull(user2.getCoverPicture());
+        assertArrayEquals(
+                user2.getCoverPicture().getData(), loadResource("cover.jpg"));
         long tm = System.nanoTime();
         boolean ok = user2.checkPassword("abcdef123456");
         tm = System.nanoTime()-tm;
         assertTrue(ok);
-        assertTrue(tm < 100000); // 0.1ms
+        assertTrue(tm < 1000000); // 1ms
     }
 
     @Test
@@ -81,5 +90,17 @@ public class BizTest extends BizTestBase {
         assertEquals(1, group.getUserCount());
         assertTrue(group.containsUser(user));
         assertTrue(user.isInGroup(group));
+    }
+
+    private Media fromJpegResource(String name) throws IOException {
+        Media media = new Media();
+        media.setMimeType("image/jpeg");
+        media.setData(loadResource(name));
+        session.insert(media);
+        return media;
+    }
+
+    public static byte[] loadResource(String name) throws IOException {
+        return Util.loadBinary(BizTest.class.getResource(name));
     }
 }
