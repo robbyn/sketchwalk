@@ -27,7 +27,7 @@ public class BizTest extends BizTestBase {
     @Test
     public void createUser() throws IOException {
         User user = new User();
-        user.setUsername("robby");
+        user.setUsername("test");
         user.setDisplayName("Maurice Perry");
         user.setEmail("maurice@perry.ch");
         user.setPassword("abcdef123456");
