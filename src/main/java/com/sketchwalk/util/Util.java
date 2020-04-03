@@ -1,5 +1,6 @@
 package com.sketchwalk.util;
 
+import com.sketchwalk.biz.Page;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +11,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 
 public class Util {
@@ -57,5 +59,17 @@ public class Util {
             }
             return out.toByteArray();
         }
+    }
+
+    public static int compareStrings(String a, String b) {
+        if (a == b) {
+            return 0;
+        } else if (a == null) {
+            return -1;
+        } else if (b == null) {
+            return 1;
+        }
+        int r = a.compareToIgnoreCase(b);
+        return r != 0 ? r : a.compareTo(b);
     }
 }
