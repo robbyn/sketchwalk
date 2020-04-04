@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapping PUBLIC '-//tastefuljava.org//Jedo Mapping File 1.0//EN' 'jedo.dtd'>
 <mapping package="com.sketchwalk.biz">
-
     <class name="Media">
         <id>
             <field name="id" column="ID"/>
@@ -292,4 +291,3 @@
         ]]></delete>
     </class>
 </mapping>
-
