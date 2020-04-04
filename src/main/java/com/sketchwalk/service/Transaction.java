@@ -5,6 +5,7 @@ import com.sketchwalk.biz.PageVersion;
 import com.sketchwalk.biz.Site;
 import com.sketchwalk.biz.SiteRevision;
 import java.io.Closeable;
+import java.util.Arrays;
 import java.util.Collection;
 import org.tastefuljava.jedo.Session;
 import org.tastefuljava.jedo.SessionFactory;
@@ -14,6 +15,11 @@ public class Transaction implements Closeable {
 
     public Transaction(SessionFactory factory) {
         this.session = factory.openSession();
+    }
+
+    public Site createSite(String name, String rootTemplate,
+            String... languages) {
+        return createSite(name, rootTemplate, Arrays.asList(languages));
     }
 
     public Site createSite(String name, String rootTemplate,
@@ -35,7 +41,11 @@ public class Transaction implements Closeable {
         return rev;
     }
 
-    private Page createPage(String template,
+    public Page createPage(String template, String...languages) {
+        return createPage(template, Arrays.asList(languages));
+    }
+
+    public Page createPage(String template,
             Collection<String> languages) {
         Page page = new Page();
         page.setTemplate(template);
@@ -47,7 +57,7 @@ public class Transaction implements Closeable {
         return page;
     }
 
-    private PageVersion createPageVersion(String title) {
+    public PageVersion createPageVersion(String title) {
         PageVersion ver = new PageVersion(title);
         session.insert(ver);
         return ver;

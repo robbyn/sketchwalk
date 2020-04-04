@@ -1,14 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.sketchwalk.biz;
 
-/**
- *
- * @author maurice
- */
-public class SiteTest {
+import com.sketchwalk.service.Transaction;
+import java.io.IOException;
+import java.sql.SQLException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.Ignore;
+
+public class SiteTest extends BizTestBase {
+    private Transaction trans;
+
+    @Before
+    public void setUp() throws IOException, SQLException, ClassNotFoundException {
+        super.initialize();
+        trans = new Transaction(factory);
+    }
     
+    @After
+    public void tearDown() throws SQLException, IOException {
+        trans.close();
+        super.terminate();
+    }
+
+    @Ignore("Missing implementation")
+    @Test
+    public void testSiteCreation() {
+        Site site = trans.createSite("my-site", "basic-page", "en", "fr");
+        assertNotNull(site);
+        trans.commit();
+    }
+
+    @Test
+    public void testPageCreation() {
+        Page page = trans.createPage("basic-page", "en", "fr");
+        assertNotNull(page);
+        trans.commit();
+    }
 }

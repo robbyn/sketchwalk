@@ -193,5 +193,21 @@
                 WHERE PAGE_ID=${page.id}
             ]]></clear>
         </map>
+        <load><![CDATA[
+            SELECT * FROM pages
+            WHERE ID=${id}
+        ]]></load>
+        <insert get-generated-keys="true"><![CDATA[
+            INSERT INTO pages(TEMPLATE)
+            VALUES(${template})
+        ]]></insert>
+        <update><![CDATA[
+            UPDATE pages
+            SET TEMPLATE=${template}
+            WHERE ID=${id}
+        ]]></update>
+        <delete><![CDATA[
+            DELETE FROM pages WHERE ID=${id}
+        ]]></delete>
     </class>
 </mapping>
