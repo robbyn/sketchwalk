@@ -71,4 +71,12 @@ public class Page {
     public boolean removeChild(Page child) {
         return children.remove(child);
     }
+
+    public PageVersion getVersion(String language) {
+        return versions.get(language);
+    }
+
+    public void setVersion(String language, PageVersion version) {
+        versions.put(language, version);
+    }
 }
