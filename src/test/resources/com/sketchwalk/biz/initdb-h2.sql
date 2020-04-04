@@ -39,3 +39,19 @@ CREATE TABLE groups_users (
 );
 
 CREATE UNIQUE INDEX groups_users_uid_gid ON groups_users(USER_ID,GROUP_ID);
+
+----------------------------------------------------------------------------------
+
+CREATE TABLE site_revisions (
+    ID INT NOT NULL IDENTITY
+);
+
+CREATE TABLE sites (
+    ID INT NOT NULL IDENTITY,
+    NAME VARCHAR(32) NOT NULL,
+    CURRENT_REV_ID INT,
+
+    FOREIGN KEY (CURRENT_REV_ID) REFERENCES site_revisions(ID)
+);
+
+CREATE UNIQUE INDEX sites_name ON sites(NAME);
