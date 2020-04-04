@@ -42,16 +42,31 @@ CREATE UNIQUE INDEX groups_users_uid_gid ON groups_users(USER_ID,GROUP_ID);
 
 ----------------------------------------------------------------------------------
 
-CREATE TABLE site_revisions (
+CREATE TABLE pages (
     ID INT NOT NULL IDENTITY
 );
 
 CREATE TABLE sites (
     ID INT NOT NULL IDENTITY,
     NAME VARCHAR(32) NOT NULL,
-    CURRENT_REV_ID INT,
-
-    FOREIGN KEY (CURRENT_REV_ID) REFERENCES site_revisions(ID)
+    CURRENT_REV_ID INT
 );
 
 CREATE UNIQUE INDEX sites_name ON sites(NAME);
+
+CREATE TABLE site_revisions (
+    ID INT NOT NULL IDENTITY,
+    BASE_REV_ID INT,
+    SITE_ID INT NOT NULL,
+    TIMESTAMP TIMESTAMP NOT NULL,
+    ROOT_PAGE_ID INT NOT NULL,
+
+    FOREIGN KEY (BASE_REV_ID) REFERENCES site_revisions(ID),
+    FOREIGN KEY (SITE_ID) REFERENCES sites(ID),
+    FOREIGN KEY (ROOT_PAGE_ID) REFERENCES pages(ID)
+);
+
+ALTER TABLE sites
+ADD CONSTRAINT fk_sites_current_rev_id
+FOREIGN KEY (CURRENT_REV_ID) REFERENCES site_revisions(ID);
+
