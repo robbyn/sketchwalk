@@ -41,10 +41,41 @@ CREATE TABLE groups_users (
 CREATE UNIQUE INDEX groups_users_uid_gid ON groups_users(USER_ID,GROUP_ID);
 
 ----------------------------------------------------------------------------------
+-- Site structure
+----------------------------------------------------------------------------------
 
 CREATE TABLE pages (
-    ID INT NOT NULL IDENTITY
+    ID INT NOT NULL IDENTITY,
+    TEMPLATE VARCHAR(32) NOT NULL
 );
+
+CREATE TABLE pages_pages (
+    PARENT_ID INT NOT NULL,
+    NAME VARCHAR(32) NOT NULL,
+    CHILD_ID INT NOT NULL,
+
+    PRIMARY KEY (PARENT_ID,NAME)
+);
+
+CREATE UNIQUE INDEX pages_pages_child_parent ON pages_pages(CHILD_ID,PARENT_ID);
+
+CREATE TABLE page_versions (
+    ID INT NOT NULL IDENTITY,
+    TITLE VARCHAR NOT NULL
+);
+
+CREATE TABLE pages_page_versions (
+    PAGE_ID INT NOT NULL,
+    LANGUAGE VARCHAR(10) NOT NULL,
+    VERSION_ID INT NOT NULL,
+
+    PRIMARY KEY (PAGE_ID,LANGUAGE),
+    FOREIGN KEY (PAGE_ID) REFERENCES pages(ID),
+    FOREIGN KEY (VERSION_ID) REFERENCES page_versions(ID)
+);
+
+CREATE INDEX pages_page_versions_version_page
+        ON pages_page_versions(VERSION_ID,PAGE_ID);
 
 CREATE TABLE sites (
     ID INT NOT NULL IDENTITY,
@@ -69,4 +100,3 @@ CREATE TABLE site_revisions (
 ALTER TABLE sites
 ADD CONSTRAINT fk_sites_current_rev_id
 FOREIGN KEY (CURRENT_REV_ID) REFERENCES site_revisions(ID);
-

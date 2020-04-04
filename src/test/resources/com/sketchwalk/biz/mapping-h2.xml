@@ -7,17 +7,17 @@
         </id>
         <field name="mimeType" column="MIME_TYPE"/>
         <field name="data" column="DATA"/>
-        <load>
+        <load><![CDATA[
             SELECT * FROM medias
             WHERE ID=${id}
-        </load>
-        <insert get-generated-keys="true">
+        ]]></load>
+        <insert get-generated-keys="true"><![CDATA[
             INSERT INTO medias(MIME_TYPE,DATA)
             VALUES(${mimeType},${data})
-        </insert>
-        <delete>
+        ]]></insert>
+        <delete><![CDATA[
             DELETE FROM medias WHERE ID=${id}
-        </delete>
+        ]]></delete>
     </class>
 
     <class name="User">
@@ -31,49 +31,49 @@
         <reference name="profilePicture" column="PROFILE_PICTURE" fetch-mode="lazy"/>
         <reference name="coverPicture" column="COVER_PICTURE" fetch-mode="lazy"/>
         <set name="groups" fetch-mode="lazy">
-            <fetch>
+            <fetch><![CDATA[
                 SELECT groups.* FROM groups_users,groups
                 WHERE USER_ID=${id} AND GROUP_ID=groups.ID
-            </fetch>
-            <add parent="parent" element="child">
+            ]]></fetch>
+            <add parent="parent" element="child"><![CDATA[
                 INSERT INTO groups_users(GROUP_ID,USER_ID)
                 VALUES(${child.id},${parent.id})
-            </add>
-            <remove parent="parent" element="child">
+            ]]></add>
+            <remove parent="parent" element="child"><![CDATA[
                 DELETE FROM groups_users
                 WHERE USER_ID=${parent.id} AND GROUP_ID=${child.id}
-            </remove>
-            <clear parent="parent">
+            ]]></remove>
+            <clear parent="parent"><![CDATA[
                 DELETE FROM groups_users
                 WHERE USER_ID=${parent.id}
-            </clear>
+            ]]></clear>
         </set>
 
-        <load>
+        <load><![CDATA[
             SELECT * FROM users
             WHERE ID=${id}
-        </load>
-        <query name="byUsername" parameters="username">
+        ]]></load>
+        <query name="byUsername" parameters="username"><![CDATA[
             SELECT * FROM users
             WHERE USERNAME=${username}
-        </query>
-        <query name="byEmail" parameters="email">
+        ]]></query>
+        <query name="byEmail" parameters="email"><![CDATA[
             SELECT * FROM users
             WHERE EMAIL=${email}
-        </query>
-        <insert get-generated-keys="true">
+        ]]></query>
+        <insert get-generated-keys="true"><![CDATA[
             INSERT INTO users(USERNAME,EMAIL,PASSWORD_HASH,DISPLAY_NAME,PROFILE_PICTURE,COVER_PICTURE)
             VALUES(${username},${email},${passwordHash},${displayName},${profilePicture.id},${coverPicture.id})
-        </insert>
-        <update>
+        ]]></insert>
+        <update><![CDATA[
             UPDATE users
             SET USERNAME=${username}, EMAIL=${email}, PASSWORD_HASH=${passwordHash},
                 DISPLAY_NAME=${displayName}, PROFILE_PICTURE=${profilePicture.id}, COVER_PICTURE=${coverPicture.id}
             WHERE ID=${id}
-        </update>
-        <delete>
+        ]]></update>
+        <delete><![CDATA[
             DELETE FROM users WHERE ID=${id}
-        </delete>
+        ]]></delete>
     </class>
 
     <class name="Group">
@@ -84,44 +84,114 @@
         <field name="displayName" column="DISPLAY_NAME"/>
         <field name="description" column="DESCRIPTION"/>
         <set name="users" fetch-mode="lazy">
-            <fetch>
+            <fetch><![CDATA[
                 SELECT users.* FROM groups_users,users
                 WHERE GROUP_ID=${id} AND USER_ID=users.ID
-            </fetch>
-            <add parent="parent" element="child">
+            ]]></fetch>
+            <add parent="parent" element="child"><![CDATA[
                 INSERT INTO groups_users(GROUP_ID,USER_ID)
                 VALUES(${parent.id},${child.id})
-            </add>
-            <remove parent="parent" element="child">
+            ]]></add>
+            <remove parent="parent" element="child"><![CDATA[
                 DELETE FROM groups_users
                 WHERE GROUP_ID=${parent.id} AND USER_ID=${child.id}
-            </remove>
-            <clear parent="parent">
+            ]]></remove>
+            <clear parent="parent"><![CDATA[
                 DELETE FROM groups_users
                 WHERE GROUP_ID=${parent.id}
-            </clear>
+            ]]></clear>
         </set>
 
-        <load>
+        <load><![CDATA[
             SELECT * FROM groups
             WHERE ID=${id}
-        </load>
-        <query name="byName" parameters="name">
+        ]]></load>
+        <query name="byName" parameters="name"><![CDATA[
             SELECT * FROM groups
             WHERE USERNAME=${name}
-        </query>
-        <insert get-generated-keys="true">
+        ]]></query>
+        <insert get-generated-keys="true"><![CDATA[
             INSERT INTO groups(NAME,DISPLAY_NAME,DESCRIPTION)
             VALUES(${name},${displayName},${description})
-        </insert>
-        <update>
+        ]]></insert>
+        <update><![CDATA[
             UPDATE groups
             SET NAME=${name}, DISPLAY_NAME=${displayName},
                 DESCRIPTION=${description}
             WHERE ID=${id}
-        </update>
-        <delete>
+        ]]></update>
+        <delete><![CDATA[
             DELETE FROM groups WHERE ID=${id}
-        </delete>
+        ]]></delete>
+    </class>
+
+    <class name="PageVersion">
+        <id>
+            <field name="id" column="ID"/>
+        </id>
+        <field name="title" column="TITLE"/>
+
+        <load><![CDATA[
+            SELECT * FROM page_versions
+            WHERE ID=${id}
+        ]]></load>
+        <insert get-generated-keys="true"><![CDATA[
+            INSERT INTO page_versions(TITLE)
+            VALUES(${title})
+        ]]></insert>
+        <update><![CDATA[
+            UPDATE page_versions
+            SET TITLE=${title}
+            WHERE ID=${id}
+        ]]></update>
+        <delete><![CDATA[
+            DELETE FROM page_versions WHERE ID=${id}
+        ]]></delete>
+    </class>
+
+    <class name="Page">
+        <id>
+            <field name="id" column="ID"/>
+        </id>
+        <field name="template" column="TEMPLATE"/>
+        <map name="children" fetch-mode="lazy">
+            <key column="NAME"/>
+            <fetch><![CDATA[
+                SELECT NAME,pages.* FROM pages_pages JOIN pages ON (CHILD_ID=ID)
+                WHERE PARENT_ID=${id}
+            ]]></fetch>
+            <put parent="parent" key="name" element="child"><![CDATA[
+                INSERT INTO pages_pages(PARENT_ID,NAME,CHILD_ID)
+                VALUES(${parent.id},${name},${child.id})
+            ]]></put>
+            <remove-key parent="parent" key="name"><![CDATA[
+                DEKETE FROM pages_pages
+                WHERE PARENT_ID=${parent.id} AND NAME=${name}
+            ]]></remove-key>
+            <clear parent="parent"><![CDATA[
+                DEKETE FROM pages_pages
+                WHERE PARENT_ID=${parent.id}
+            ]]></clear>
+        </map>
+        <map name="versions" fetch-mode="lazy">
+            <key column="LANGUAGE"/>
+            <fetch><![CDATA[
+                SELECT LANGUAGE,page_versions.* FROM pages_page_versions
+                    JOIN page_versions ON (VERSION_ID=ID)
+                WHERE PAGE_ID=${id}
+            ]]></fetch>
+            <put parent="page" key="language" element="version"><![CDATA[
+                INSERT INTO pages_page_versions(PAGE_ID,LANGUAGE,VERSION_ID)
+                VALUES(${page.id},${language},${version.id})
+            ]]></put>
+            <remove-key parent="page" key="language"><![CDATA[
+                DELETE FROM pages_page_versions
+                WHERE PAGE_ID=${page.id} AND LANGUAGE=${language}
+            ]]></remove-key>
+            <clear parent="page"><![CDATA[
+                DELETE FROM pages_page_versions
+                WHERE PAGE_ID=${page.id}
+            ]]></clear>
+        </map>
     </class>
 </mapping>

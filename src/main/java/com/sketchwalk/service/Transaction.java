@@ -30,15 +30,14 @@ public class Transaction implements Closeable {
             Collection<String> languages) {
         SiteRevision rev = new SiteRevision(site);
         rev.setLanguages(languages);
-        rev.setRootPage(createPage("/", rootTemplate, languages));
+        rev.setRootPage(createPage(rootTemplate, languages));
         session.insert(rev);
         return rev;
     }
 
-    private Page createPage(String name, String template,
+    private Page createPage(String template,
             Collection<String> languages) {
         Page page = new Page();
-        page.setName(name);
         page.setTemplate(template);
         PageVersion version = createPageVersion("Page title");
         for (String language: languages) {
