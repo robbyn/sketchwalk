@@ -99,3 +99,11 @@ CREATE TABLE site_revisions (
 ALTER TABLE sites
 ADD CONSTRAINT fk_sites_current_rev_id
 FOREIGN KEY (CURRENT_REV_ID) REFERENCES site_revisions(ID);
+
+CREATE TABLE site_revision_languages (
+    REV_ID INT NOT NULL,
+    LANGUAGE VARCHAR(10) NOT NULL,
+
+    PRIMARY KEY (REV_ID,LANGUAGE),
+    FOREIGN KEY (REV_ID) REFERENCES site_revisions(ID)
+);

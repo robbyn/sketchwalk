@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapping PUBLIC '-//tastefuljava.org//Jedo Mapping File 1.0//EN' 'jedo.dtd'>
 <mapping package="com.sketchwalk.biz">
+
     <class name="Media">
         <id>
             <field name="id" column="ID"/>
@@ -19,6 +20,8 @@
             DELETE FROM medias WHERE ID=${id}
         ]]></delete>
     </class>
+
+<!-- Users and groups -->
 
     <class name="User">
         <id>
@@ -250,6 +253,25 @@
         <field name="username" column="USERNAME"/>
         <reference name="baseRevision" column="BASE_REV_ID" fetch-mode="lazy"/>
         <reference name="rootPage" column="ROOT_PAGE_ID" fetch-mode="lazy"/>
+        <set name="languages" fetch-mode="lazy">
+            <element column="LANGUAGE"/>
+            <fetch><![CDATA[
+                SELECT * FROM site_revision_languages
+                WHERE REV_ID=${id}
+            ]]></fetch>
+            <add parent="parent" element="language"><![CDATA[
+                INSERT INTO site_revision_languages(REV_ID,LANGUAGE)
+                VALUES(${parent.id},${language})
+            ]]></add>
+            <remove parent="parent" element="language"><![CDATA[
+                DELETE FROM site_revision_languages
+                WHERE REV_ID=${parent.id} AND LANGUAGE=${language}
+            ]]></remove>
+            <clear parent="parent"><![CDATA[
+                DELETE FROM site_revision_languages
+                WHERE REV_ID=${parent.id}
+            ]]></clear>
+        </set>
         <load><![CDATA[
             SELECT * FROM site_revisions
             WHERE ID=${id}

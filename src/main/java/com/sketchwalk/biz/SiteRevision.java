@@ -11,25 +11,21 @@ public class SiteRevision {
     private final Instant timestamp = Instant.now();
     private final String username;
     private final Ref<SiteRevision> baseRevision = new Ref<>();
-    private final Site site;
     private final Set<String> languages = new HashSet<>();
     private final Ref<Page> rootPage = new Ref<>();
 
     @Deprecated // only called via reflection
     public SiteRevision() {
         this.username = null;
-        this.site = null;
     }
 
-    public SiteRevision(Site site, String username) {
+    public SiteRevision(String username) {
         this.username = username;
-        this.site = site;
     }
 
     public SiteRevision(SiteRevision baseRevision, String username) {
         this.username = username;
         this.baseRevision.set(baseRevision);
-        this.site = baseRevision.site;
         this.languages.addAll(baseRevision.languages);
         this.rootPage.set(baseRevision.rootPage.get());
     }
@@ -44,10 +40,6 @@ public class SiteRevision {
 
     public SiteRevision getBaseRevision() {
         return baseRevision.get();
-    }
-
-    public Site getSite() {
-        return site;
     }
 
     public Set<String> getLanguages() {

@@ -36,7 +36,7 @@ public class Transaction implements Closeable {
 
     public SiteRevision createSiteRevision(Site site, String rootTemplate,
             Collection<String> languages) {
-        SiteRevision rev = new SiteRevision(site, username);
+        SiteRevision rev = new SiteRevision(username);
         rev.setLanguages(languages);
         rev.setRootPage(createPage(rootTemplate, languages));
         session.insert(rev);
