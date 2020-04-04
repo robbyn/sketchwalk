@@ -1,9 +1,11 @@
 package com.sketchwalk.biz;
 
+import org.tastefuljava.jedo.Ref;
+
 public class Site {
     private int id;
     private String name;
-    private SiteRevision currentRevision;
+    private final Ref<SiteRevision> currentRevision = new Ref<>();
 
     public Site() {
     }
@@ -25,10 +27,10 @@ public class Site {
     }
 
     public SiteRevision getCurrentRevision() {
-        return currentRevision;
+        return currentRevision.get();
     }
 
     public void setCurrentRevision(SiteRevision rev) {
-        this.currentRevision = rev;
+        this.currentRevision.set(rev);
     }
 }

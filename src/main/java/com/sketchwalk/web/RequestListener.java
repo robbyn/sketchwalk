@@ -19,7 +19,11 @@ public class RequestListener implements ServletRequestListener {
         HttpServletRequest req = (HttpServletRequest)sre.getServletRequest();
         SessionHelper sess = SessionListener.getSessionHelper(
                 req.getSession(true));
-        req.setAttribute(ATTR_TRANSACTION, sess.openRequest());
+        String username = req.getRemoteUser();
+        if (username == null) {
+            username = "anonymous";
+        }
+        req.setAttribute(ATTR_TRANSACTION, sess.openRequest(username));
     }
 
     @Override

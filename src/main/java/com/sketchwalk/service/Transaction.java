@@ -12,9 +12,11 @@ import org.tastefuljava.jedo.SessionFactory;
 
 public class Transaction implements Closeable {
     private final Session session;
+    private final String username;
 
-    public Transaction(SessionFactory factory) {
+    public Transaction(SessionFactory factory, String username) {
         this.session = factory.openSession();
+        this.username = username;
     }
 
     public Site createSite(String name, String rootTemplate,
@@ -34,7 +36,7 @@ public class Transaction implements Closeable {
 
     public SiteRevision createSiteRevision(Site site, String rootTemplate,
             Collection<String> languages) {
-        SiteRevision rev = new SiteRevision(site);
+        SiteRevision rev = new SiteRevision(site, username);
         rev.setLanguages(languages);
         rev.setRootPage(createPage(rootTemplate, languages));
         session.insert(rev);

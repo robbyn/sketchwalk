@@ -15,16 +15,15 @@ public class SiteTest extends BizTestBase {
     @Before
     public void setUp() throws IOException, SQLException, ClassNotFoundException {
         super.initialize();
-        trans = new Transaction(factory);
+        trans = new Transaction(factory,"myself");
     }
-    
+
     @After
     public void tearDown() throws SQLException, IOException {
         trans.close();
         super.terminate();
     }
 
-    @Ignore("Missing implementation")
     @Test
     public void testSiteCreation() {
         Site site = trans.createSite("my-site", "basic-page", "en", "fr");

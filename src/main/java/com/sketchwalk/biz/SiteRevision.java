@@ -8,30 +8,38 @@ import org.tastefuljava.jedo.Ref;
 
 public class SiteRevision {
     private int id;
+    private final Instant timestamp = Instant.now();
+    private final String username;
     private final Ref<SiteRevision> baseRevision = new Ref<>();
     private final Site site;
-    private final Instant timestamp = Instant.now();
     private final Set<String> languages = new HashSet<>();
-    private Page rootPage;
+    private final Ref<Page> rootPage = new Ref<>();
 
     @Deprecated // only called via reflection
     public SiteRevision() {
+        this.username = null;
         this.site = null;
     }
 
-    public SiteRevision(Site site) {
+    public SiteRevision(Site site, String username) {
+        this.username = username;
         this.site = site;
     }
 
-    public SiteRevision(SiteRevision baseRevision) {
+    public SiteRevision(SiteRevision baseRevision, String username) {
+        this.username = username;
         this.baseRevision.set(baseRevision);
         this.site = baseRevision.site;
         this.languages.addAll(baseRevision.languages);
-        this.rootPage = baseRevision.rootPage;
+        this.rootPage.set(baseRevision.rootPage.get());
     }
 
     public int getId() {
         return id;
+    }
+
+    public Instant getTimestamp() {
+        return timestamp;
     }
 
     public SiteRevision getBaseRevision() {
@@ -40,10 +48,6 @@ public class SiteRevision {
 
     public Site getSite() {
         return site;
-    }
-
-    public Instant getTimestamp() {
-        return timestamp;
     }
 
     public Set<String> getLanguages() {
@@ -66,10 +70,11 @@ public class SiteRevision {
     }
 
     public Page getRootPage() {
-        return rootPage;
+        return rootPage.get();
     }
 
     public void setRootPage(Page rootPage) {
-        this.rootPage = rootPage;
+        this.rootPage.set(rootPage);
     }
 }
+

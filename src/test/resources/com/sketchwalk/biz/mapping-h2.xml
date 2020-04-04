@@ -125,6 +125,8 @@
         ]]></delete>
     </class>
 
+<!-- Site Structure -->
+
     <class name="PageVersion">
         <id>
             <field name="id" column="ID"/>
@@ -210,4 +212,62 @@
             DELETE FROM pages WHERE ID=${id}
         ]]></delete>
     </class>
+
+    <class name="Site">
+        <id>
+            <field name="id" column="ID"/>
+        </id>
+        <field name="name" column="NAME"/>
+        <reference name="currentRevision" column="CURRENT_REV_ID"
+                fetch-mode="lazy"/>
+        <load><![CDATA[
+            SELECT * FROM sites
+            WHERE ID=${id}
+        ]]></load>
+        <query name="byName" parameters="name"><![CDATA[
+            SELECT * FROM sites
+            WHERE NAME=${name}
+        ]]></query>
+        <insert get-generated-keys="true"><![CDATA[
+            INSERT INTO sites(NAME,CURRENT_REV_ID)
+            VALUES(${name},${currentRevision.id})
+        ]]></insert>
+        <update><![CDATA[
+            UPDATE sites
+            SET NAME=${name},CURRENT_REV_ID=${currentRevision.id}
+            WHERE ID=${id}
+        ]]></update>
+        <delete><![CDATA[
+            DELETE FROM sites WHERE ID=${id}
+        ]]></delete>
+    </class>
+
+    <class name="SiteRevision">
+        <id>
+            <field name="id" column="ID"/>
+        </id>
+        <field name="timestamp" column="TIMESTAMP"/>
+        <field name="username" column="USERNAME"/>
+        <reference name="baseRevision" column="BASE_REV_ID" fetch-mode="lazy"/>
+        <reference name="rootPage" column="ROOT_PAGE_ID" fetch-mode="lazy"/>
+        <load><![CDATA[
+            SELECT * FROM site_revisions
+            WHERE ID=${id}
+        ]]></load>
+        <insert get-generated-keys="true"><![CDATA[
+            INSERT INTO site_revisions(TIMESTAMP,USERNAME,BASE_REV_ID,
+                ROOT_PAGE_ID)
+            VALUES(${timestamp},${username},${baseRevision.id},${rootPage.id})
+        ]]></insert>
+        <update><![CDATA[
+            UPDATE site_revisions
+            SET TIMESTAMP=${timestamp},USERNAME=${username},
+                BASE_REV_ID=${baseRevision.id},ROOT_PAGE_ID=${rootPage.id}
+            WHERE ID=${id}
+        ]]></update>
+        <delete><![CDATA[
+            DELETE FROM site_revisions WHERE ID=${id}
+        ]]></delete>
+    </class>
 </mapping>
+

@@ -15,7 +15,7 @@ public class SessionHelper implements Closeable {
     public void close() {
     }
 
-    public RequestHelper openRequest() {
-        return new RequestHelper(factory);
+    public RequestHelper openRequest(String username) {
+        return new RequestHelper(factory, username);
     }
 }
