@@ -2,7 +2,15 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <listener>
         <description>ServletContextListener</description>
-        <listener-class>com.sketchwalk.service.ApplicationListener</listener-class>
+        <listener-class>com.sketchwalk.web.ApplicationListener</listener-class>
+    </listener>
+    <listener>
+        <description>HttpSessionListener</description>
+        <listener-class>com.sketchwalk.web.SessionListener</listener-class>
+    </listener>
+    <listener>
+        <description>RequestListener</description>
+        <listener-class>com.sketchwalk.web.RequestListener</listener-class>
     </listener>
     <session-config>
         <session-timeout>

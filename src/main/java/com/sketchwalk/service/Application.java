@@ -12,4 +12,8 @@ public class Application implements Closeable {
     @Override
     public void close() {
     }
+
+    public SessionHelper openSession() {
+        return new SessionHelper(factory);
+    }
 }
