@@ -2,7 +2,6 @@ package com.sketchwalk.web;
 
 import com.sketchwalk.service.Application;
 import com.sketchwalk.service.SessionHelper;
-import com.sketchwalk.web.ApplicationListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
