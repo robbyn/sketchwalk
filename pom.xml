@@ -40,7 +40,6 @@
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/javax/javaee-web-api -->
-        <!-- https://mvnrepository.com/artifact/javax/javaee-web-api -->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
